@@ -1,0 +1,95 @@
+<h1>Eat-Da-Burger!</h1>
+
+<h2>Burgers that are not eaten!</h2>
+
+<ul>
+  {{#each burgers}}
+    {{#unless devoured}}
+      {{!-- {{> burgers/burger-block devoured=true}} --}}
+      {{this.burger_name}}
+	    <button class="change-devour" data-id="{{id}}" data-newdevoured="{{devoured}}">
+            Devour!!
+	    </button>
+    {{/unless}}
+  {{/each}}
+</ul>
+
+<h2>Burgers that have been devoured</h2>
+
+<ul>
+  {{#each burgers}}
+    {{#if devoured}}
+        {{this.burger_name}}
+    {{/if}}
+  {{/each}}
+</ul>
+
+<h2>Add a Burger</h2>
+<form class="add-burger">
+
+  <div class="form-group">
+    <label for="burg">Burger Name:</label>
+    <input type="text" id="burg" name="name">
+  </div>
+
+  <div class="form-group">
+    <label for="devoured">Devoured?</label><br>
+    <input type="radio" name="devoured" value="1" checked> Devoured!<br>
+    <input type="radio" name="devoured" value="0"> Not devoured yet
+  </div>
+
+  <button type="submit">Add Burger</button>
+</form>
+
+<div>
+    <a href="/api/burgers">API Data</a>
+</div>
+
+<script>
+$(function() {
+  $(".change-devour").on("click", function(event) {
+    var id = $(this).data("id");
+    var newDevoured = $(this).data("newdevoured");
+    console.log(id, newDevoured)
+    var newDevouredState = {
+      devoured: newDevoured
+    };
+
+    // Send the PUT request.
+    $.ajax("/api/burgers/" + id, {
+      type: "PUT",
+      data: newDevouredState
+    }).then(
+      function() {
+        console.log("Changge to " + newDevoured);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+  $(".add-burger").on("submit", function(event) {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    var newBurger = {
+      burger_name: $("#burg").val().trim(),
+      devoured: $("[name=devoured]:checked").val().trim()
+    };
+
+    // Send the POST request.
+    $.ajax("/api/burgers", {
+      type: "POST",
+      data: newBurger
+    }).then(
+      function() {
+        console.log("");
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+
+});
+</script>
