@@ -33,9 +33,9 @@ var orm = {
   },
 
   insertOne: function (table, col, vals, cb) {
-    var queryString = "SELECT * FROM " + table;
+    var queryString = "INSERT INTO " + table;
     queryString += " (";
-    queryString += cols.toString();
+    queryString += col.toString();
     queryString += ") ";
     queryString += "VALUES (";
     queryString += printQuestionMarks(vals.length);
