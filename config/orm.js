@@ -22,7 +22,7 @@ function objToSql(ob) {
 }
 
 var orm = {
-  all: function(tableInput, cb) {
+  selectAll: function(tableInput, cb) {
     var queryString = "SELECT * FROM " + tableInput + ";";
     connection.query(queryString, function(err, result) {
       if (err) {
@@ -32,7 +32,7 @@ var orm = {
     });
   },
 
-  create: function (table, col, vals, cb) {
+  insertOne: function (table, col, vals, cb) {
     var queryString = "SELECT * FROM " + table;
     queryString += " (";
     queryString += cols.toString();
@@ -52,7 +52,7 @@ var orm = {
 
     })
   },
-  update: function (table, objColVals, condition, cb) {
+  updateOne: function (table, objColVals, condition, cb) {
     var queryString = "UPDATE" + table;
     queryString += " SET ";
     queryString += objToSql(objColVals);
@@ -70,5 +70,3 @@ var orm = {
 
 
 module.exports = orm
-
-// html (handlebars), connecting id, class, buttons
